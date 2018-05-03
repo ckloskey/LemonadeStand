@@ -15,10 +15,6 @@ namespace Lemonade_Stand
         private int sugarInInventory;
         private int cupsInInventory;
         private int icecubesInInventory;
-        private int setLemonsInInventory;
-        private int setSugarInInventory;
-        private int setCupsInInventory;
-        private int setIceCubesInInventory;
 
         public Inventory()
         {
@@ -28,7 +24,7 @@ namespace Lemonade_Stand
             this.icecubesInInventory = 0;
         }
 
-        public double LemonsInInventory
+        public int LemonsInInventory
         {
             get
             {
@@ -36,10 +32,10 @@ namespace Lemonade_Stand
             }
             set
             {
-                lemonsInInventory = setLemonsInInventory;
+                lemonsInInventory = value;
             }
         }
-        public double SugarInInventory
+        public int SugarInInventory
         {
             get
             {
@@ -47,10 +43,10 @@ namespace Lemonade_Stand
             }
             set
             {
-                sugarInInventory = setSugarInInventory;
+                sugarInInventory = value;
             }
         }
-        public double CupsInInventory
+        public int CupsInInventory
         {
             get
             {
@@ -58,10 +54,10 @@ namespace Lemonade_Stand
             }
             set
             {
-                cupsInInventory = setCupsInInventory;
+                cupsInInventory = value;
             }
         }
-        public double IcecubesInInventory
+        public int IcecubesInInventory
         {
             get
             {
@@ -69,7 +65,7 @@ namespace Lemonade_Stand
             }
             set
             {
-                icecubesInInventory = setIceCubesInInventory;
+                icecubesInInventory = value;
             }
         }
     }

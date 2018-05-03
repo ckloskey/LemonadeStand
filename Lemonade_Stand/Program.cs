@@ -16,9 +16,8 @@ namespace Lemonade_Stand
             //1 user determines number of days to play X
             //2 grab weather (weather randomly generated or API) X
             //display next day forecast X
-            //3 Purchase
-            //default money
-            //set prices
+            //3 Purchase X
+                //set prices
             //4 Price/Quality control
             //5 Start Selling to customers
             //display actual forecast

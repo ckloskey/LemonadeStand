@@ -16,7 +16,7 @@ namespace Lemonade_Stand
             return duration;
         }
 
-        public string DisplayMessage(string promptMessage)
+        public string PromptUserInput(string promptMessage)
         {
             Console.WriteLine(promptMessage);
             string userInput = Console.ReadLine();

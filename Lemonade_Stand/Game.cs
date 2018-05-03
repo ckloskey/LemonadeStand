@@ -12,6 +12,7 @@ namespace Lemonade_Stand
         Weather weather;
         Store store;
         Inventory inventory;
+        Player player;
         List<int> temperatureForGamePlay;
         List<string> forecastForGamePlay;
 
@@ -22,6 +23,7 @@ namespace Lemonade_Stand
             this.userInterface = new UserInterface();
             this.store = new Store();
             this.inventory = new Inventory();
+            this.player = new Player();
         }
 
         public void RunGame()
@@ -33,8 +35,19 @@ namespace Lemonade_Stand
                 forecastForGamePlay = weather.GenerateRandomForecast(duration);
                 DisplayNextDayWeather(temperatureForGamePlay, forecastForGamePlay, i);
 
-                //while !5
-                PurchasingFromStore();
+                string purchasing = null;
+                do
+                {
+                    Console.WriteLine("Money: " + player.StartingMoney);
+                    purchasing = PurchasingFromStore();
+                    if (purchasing == "5"){ break; }
+                    int purchaseQuantity = PurchaseQuantity();
+                    double itemCost = GetFromStore(purchasing);
+                    SubtractFromPlayerTotal(CalculateCost(itemCost, purchaseQuantity));
+                    SetInInventory(purchasing, purchaseQuantity);
+                } while (purchasing != "5") ;
+
+                Console.WriteLine("Day: " + (i + 1));
             }
         }
 
@@ -45,27 +58,94 @@ namespace Lemonade_Stand
             Console.WriteLine("Tomorrow's Weather Forecast: " + NextDayTemp + " & " + NextDayForecast);
         }
 
-        public void PurchasingFromStore()
+        public string PurchasingFromStore()
         {
-            string purchasing = userInterface.DisplayMessage("Purchase\n1: Lemons\n2: Sugar\n3: Cups\n4: Ice cubes/n5: Done");
-            int purchaseQuantity = Int32.Parse(userInterface.DisplayMessage("How many?"));
-            if (purchasing == "1")
+            string purchasing = userInterface.PromptUserInput("Purchase\n1: Lemons\n2: Sugar\n3: Cups\n4: Ice cubes\n5: Done");
+            return purchasing;
+        }
+
+        public int PurchaseQuantity()
+        {
+            int purchaseQuantity = Int32.Parse(userInterface.PromptUserInput("How many?"));
+            return purchaseQuantity;
+        }
+
+        public double GetFromStore(string itemBeingPurchased)
+        {
+            double cost;
+            if (itemBeingPurchased == "1")
             {
-                CalculateCost(purchaseQuantity, store.LemonPrice);
-                inventory.LemonsInInventory = purchaseQuantity;
+                cost = store.LemonPrice;
+            }
+            else if (itemBeingPurchased == "2")
+            {
+                cost = store.SugarPrice;
+            }
+            else if(itemBeingPurchased == "3")
+            {
+                cost = store.CupsPrice;
+            }
+            else if (itemBeingPurchased == "4")
+            {
+                cost = store.IceCubePrice;
+            }
+            else
+            {
+                return 0;
+            }
+
+            return cost;
+        }
+
+        public double CalculateCost(double itemPrice, int purchaseQuantity)
+        { 
+            double totalItemcost;
+            totalItemcost = (purchaseQuantity * itemPrice);
+            return totalItemcost;
+        }
+
+        public void SubtractFromPlayerTotal(double costOfPurchase)
+        {
+            if (costOfPurchase > player.StartingMoney)
+            {
+                Console.WriteLine("Can not purchase that amount. Please reduce quantity");
+            }
+            else
+            {
+                player.StartingMoney = (player.StartingMoney - costOfPurchase);
             }
         }
 
-        public void CalculateCost(int quantity, double itemPrice)
+        public void SetInInventory(string itemPurchased, int purchaseQuantity)
         {
-            double cost;
-            cost = (quantity * store.LemonPrice);
-        }
+            if (itemPurchased == "1")
+            {
+                inventory.LemonsInInventory = (inventory.LemonsInInventory + purchaseQuantity);
+            }
+            else if (itemPurchased == "2")
+            {
+                inventory.SugarInInventory = (inventory.SugarInInventory + purchaseQuantity);
+            }
+            else if (itemPurchased == "3")
+            {
+                inventory.CupsInInventory = (inventory.CupsInInventory + purchaseQuantity);
+            }
+            else if (itemPurchased == "4")
+            {
+                inventory.IcecubesInInventory = (inventory.IcecubesInInventory + purchaseQuantity);
+            }
+            else
+            {
 
-        //select what to purchase
-        //select how much to purchase
-        //add purchased crap to inventory
-        //subtract cost from total player money
+            }
+        }
+        //select
+        //get cost
+        //how many
+        //get cost
+        //check inventory cash
+            //subtract if enough
+        //set in inventory
 
         //3 Purchase
         //4 Price/Quality control
