@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,21 +32,48 @@ namespace Lemonade_Stand
             duration = userInterface.AskForDuration();
             for (int i = 0; i < duration; i++)
             {
+                //generate weather
                 temperatureForGamePlay = weather.GenerateRandomTemperature(duration);
                 forecastForGamePlay = weather.GenerateRandomForecast(duration);
                 DisplayNextDayWeather(temperatureForGamePlay, forecastForGamePlay, i);
 
+                //purchase segment
                 string purchasing = null;
-                do
+                while (purchasing != "5")
                 {
                     Console.WriteLine("Money: " + player.StartingMoney);
-                    purchasing = PurchasingFromStore();
+                    Console.WriteLine("Inventory ==> Lemons: " + inventory.TotalLemonsInInventory + " Sugar: " + inventory.TotalSugarInInventory + " Cups: " + inventory.CupsInInventory + " Ice Cubes :" + inventory.IcecubesInInventory);
+                    //PropertyInfo[] myPropertyInfo = inventory.GetType().GetProperties();
+                    //Console.WriteLine("Inventory:");
+                    //for (int j = 0; j < myPropertyInfo.Length; j++)
+                    //{
+                    //    Console.WriteLine(myPropertyInfo[j].Name + ": ");
+                    //}
+                    //PropertyInfo[] PropertyInfos = inventory.GetType().GetProperties();
+                    //foreach (var info in PropertyInfos)
+                    //{
+                    //    var propertyName = info.Name;
+                    //    var value = info.GetValue(inventory);
+                    //    Console.Write(propertyName + ": " + value);
+                    //}
+                    purchasing = userInterface.PurchasingMenu();
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
                     double itemCost = GetFromStore(purchasing);
                     SubtractFromPlayerTotal(CalculateCost(itemCost, purchaseQuantity));
                     SetInInventory(purchasing, purchaseQuantity);
-                } while (purchasing != "5") ;
+                }
+               string changeSetting = null;
+                while (changeSetting != "5")
+                {
+                    //price/qualitycontrol segment
+                    changeSetting = userInterface.QualityControlMenu();
+                    if (changeSetting == "5") { break; }
+                    SetPlayerControls();
+
+
+                }
+
 
                 Console.WriteLine("Day: " + (i + 1));
             }
@@ -58,15 +86,9 @@ namespace Lemonade_Stand
             Console.WriteLine("Tomorrow's Weather Forecast: " + NextDayTemp + " & " + NextDayForecast);
         }
 
-        public string PurchasingFromStore()
-        {
-            string purchasing = userInterface.PromptUserInput("Purchase\n1: Lemons\n2: Sugar\n3: Cups\n4: Ice cubes\n5: Done");
-            return purchasing;
-        }
-
         public int PurchaseQuantity()
         {
-            int purchaseQuantity = Int32.Parse(userInterface.PromptUserInput("How many?"));
+            int purchaseQuantity = Int32.Parse(userInterface.PromptUserInput("Quantity?"));
             return purchaseQuantity;
         }
 
@@ -93,7 +115,6 @@ namespace Lemonade_Stand
             {
                 return 0;
             }
-
             return cost;
         }
 
@@ -120,11 +141,11 @@ namespace Lemonade_Stand
         {
             if (itemPurchased == "1")
             {
-                inventory.LemonsInInventory = (inventory.LemonsInInventory + purchaseQuantity);
+                inventory.LemonsInInventory.Add(purchaseQuantity);
             }
             else if (itemPurchased == "2")
             {
-                inventory.SugarInInventory = (inventory.SugarInInventory + purchaseQuantity);
+                inventory.SugarInInventory.Add(purchaseQuantity);
             }
             else if (itemPurchased == "3")
             {
@@ -139,18 +160,17 @@ namespace Lemonade_Stand
 
             }
         }
-        //select
-        //get cost
-        //how many
-        //get cost
-        //check inventory cash
-            //subtract if enough
-        //set in inventory
+        //get current price/quantities and display
+        //select what to change
+        //set userInput as property
 
-        //3 Purchase
+        public void SetPlayerControls()
+        {
+
+        }
+
         //4 Price/Quality control
         //5 Start Selling to customers
         //6 calculate EOD profits
-        //repeat 3 to 6 until day = numOfDays
     }
 }

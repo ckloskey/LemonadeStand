@@ -11,20 +11,20 @@ namespace Lemonade_Stand
         //what is bought and left over
         //ice melts after every day
         //lemons can spoil
-        private int lemonsInInventory;
-        private int sugarInInventory;
+        private List<int> lemonsInInventory;
+        private List<int> sugarInInventory;
         private int cupsInInventory;
         private int icecubesInInventory;
 
         public Inventory()
         {
-            this.lemonsInInventory = 0;
-            this.sugarInInventory = 0;
+            this.lemonsInInventory = new List<int>();
+            this.sugarInInventory = new List<int>();
             this.cupsInInventory = 0;
             this.icecubesInInventory = 0;
         }
 
-        public int LemonsInInventory
+        public List<int> LemonsInInventory
         {
             get
             {
@@ -35,7 +35,15 @@ namespace Lemonade_Stand
                 lemonsInInventory = value;
             }
         }
-        public int SugarInInventory
+        public int TotalLemonsInInventory
+        {
+            get
+            {
+                int total = lemonsInInventory.Sum();
+                return total;
+            }
+        }
+        public List<int> SugarInInventory
         {
             get
             {
@@ -44,6 +52,15 @@ namespace Lemonade_Stand
             set
             {
                 sugarInInventory = value;
+            }
+        }
+
+        public int TotalSugarInInventory
+        {
+            get
+            {
+                int total = sugarInInventory.Sum();
+                return total;
             }
         }
         public int CupsInInventory

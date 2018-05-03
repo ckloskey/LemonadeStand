@@ -11,8 +11,10 @@ namespace Lemonade_Stand
         //runs each round of game
         //number of customers
         //subtract cups/ingredients per customer
-        //
-        //total profit calculated then returned
-        //keep running total?
+        //total sales
+        
+        //EndOfDay Class?
+        //find spoiled lemons & sugar
+        //calculate profit and total moo-lah
     }
 }
