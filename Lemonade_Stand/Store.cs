@@ -8,10 +8,6 @@ namespace Lemonade_Stand
 {
     class Store
     {
-        //cups 25, 50, 100
-        //lemons 10, 30, 75
-        //sugar 8, 20, 48
-        //ice cubes 100, 250, 500
         private double lemonPrice;
         private double sugarPrice;
         private double cupsPrice;

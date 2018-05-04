@@ -67,11 +67,19 @@ namespace Lemonade_Stand
                 while (changeSetting != "5")
                 {
                     //price/qualitycontrol segment
+                    Console.WriteLine("Price/Quality Control ==> Price/Cup: " + player.PricePerCup + " Lemons/Pitcher: " + player.LemonsPerPitcher + " Sugar/Pitcher: " + player.SugarPerPitcher + " Ice Cubes/Cup :" + player.IcePerCup);
                     changeSetting = userInterface.QualityControlMenu();
                     if (changeSetting == "5") { break; }
-                    SetPlayerControls();
-
-
+                    if (changeSetting == "1")
+                    {
+                        double newPrice = userInterface.PromptForPrice();
+                        player.PricePerCup = newPrice;
+                    }
+                    else
+                    {
+                        int newSetting = userInterface.PromptForQuantity();
+                        SetPlayerControls(changeSetting, newSetting);
+                    }
                 }
 
 
@@ -88,7 +96,7 @@ namespace Lemonade_Stand
 
         public int PurchaseQuantity()
         {
-            int purchaseQuantity = Int32.Parse(userInterface.PromptUserInput("Quantity?"));
+            int purchaseQuantity = userInterface.PromptForQuantity();
             return purchaseQuantity;
         }
 
@@ -164,9 +172,24 @@ namespace Lemonade_Stand
         //select what to change
         //set userInput as property
 
-        public void SetPlayerControls()
+        public void SetPlayerControls(string settingToChange, int newSetting)
         {
+            if (settingToChange == "2")
+            {
+                player.LemonsPerPitcher = newSetting;
+            }
+            else if (settingToChange == "3")
+            {
+                player.SugarPerPitcher = newSetting;
+            }
+            else if (settingToChange == "4")
+            {
+                player.IcePerCup = newSetting;
+            }
+            else
+            {
 
+            }
         }
 
         //4 Price/Quality control

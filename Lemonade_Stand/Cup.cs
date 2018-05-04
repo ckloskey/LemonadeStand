@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lemonade_Stand
 {
-    class Lemon
+    class Cup : Supply
     {
-        public Lemon()
+        public Cup()
         {
 
         }

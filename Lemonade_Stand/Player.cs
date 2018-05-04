@@ -67,7 +67,6 @@ namespace Lemonade_Stand
                 sugarPerPitcher = value;
             }
         }
-
         public int IcePerCup
         {
             get

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lemonade_Stand
 {
-    class Lemon
+
+    class Sugar
     {
-        public Lemon()
+        public Sugar()
         {
 
         }
-
     }
 }

@@ -9,12 +9,10 @@ namespace Lemonade_Stand
     public class UserInterface
     {
         List<string> validResponses = new List<string>{ "1", "2", "3", "4", "5" };
-        bool validInput = false;
         public int AskForDuration()
         {
             Console.WriteLine("How many days will the stand be open: 7, 14, or 21?");
             int duration = Int32.Parse(Console.ReadLine());
-
             return duration;
         }
 
@@ -44,7 +42,18 @@ namespace Lemonade_Stand
             } while (ValidUserInput(updateQualityControl) == false);
             return updateQualityControl;
         }
+        
+        public int PromptForQuantity()
+        {
+            int quantity = Int32.Parse(PromptUserInput("Quantity?"));
+            return quantity;
+        }
 
+        public Double PromptForPrice()
+        {
+            double quantity = double.Parse(PromptUserInput("Price?"));
+            return quantity;
+        }
         public bool ValidUserInput(string input)
         {
             //validInput = validResponses.Contains(input) ? true : false;
