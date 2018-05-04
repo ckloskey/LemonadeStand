@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,9 +35,9 @@ namespace Lemonade_Stand
             {
                 //generate weather
                 Day tomorrow = gameDayList[i];
-                int temperatureForTomorrow = tomorrow.Temperature;
-                string forecastForTomorrow = tomorrow.Forecast;
-                DisplayNextDayWeather(temperatureForTomorrow, forecastForTomorrow);
+                int temperatureForTomorrow = tomorrow.PredictedTemperature;
+                string forecastForTomorrow = tomorrow.PredictedForecast;
+                DisplayNextDayWeather("Tomorrow's", temperatureForTomorrow, forecastForTomorrow);
 
                 //purchase segment
                 string purchasing = null;
@@ -46,19 +45,6 @@ namespace Lemonade_Stand
                 {
                     Console.WriteLine("Money: " + player.StartingMoney);
                     Console.WriteLine("Inventory ==> Lemons: " + inventory.TotalLemonsInInventory + " Sugar: " + inventory.TotalSugarInInventory + " Cups: " + inventory.CupsInInventory + " Ice Cubes :" + inventory.IcecubesInInventory);
-                    //PropertyInfo[] myPropertyInfo = inventory.GetType().GetProperties();
-                    //Console.WriteLine("Inventory:");
-                    //for (int j = 0; j < myPropertyInfo.Length; j++)
-                    //{
-                    //    Console.WriteLine(myPropertyInfo[j].Name + ": ");
-                    //}
-                    //PropertyInfo[] PropertyInfos = inventory.GetType().GetProperties();
-                    //foreach (var info in PropertyInfos)
-                    //{
-                    //    var propertyName = info.Name;
-                    //    var value = info.GetValue(inventory);
-                    //    Console.Write(propertyName + ": " + value);
-                    //}
                     purchasing = userInterface.PurchasingMenu();
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
@@ -85,9 +71,18 @@ namespace Lemonade_Stand
                     }
                 }
 
-
-
                 Console.WriteLine("Day: " + (i + 1));
+                temperatureForTomorrow = tomorrow.ActualTemperature;
+                forecastForTomorrow = tomorrow.ActualForecast;
+                DisplayNextDayWeather("Today's",temperatureForTomorrow, forecastForTomorrow);
+                
+                //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++
+                //calculate how many cups/pitcher from recipe
+                    //when soldCup++ == cups/pitcher, make new pitcher and subtract from inventory
+                        //loop until customerList.Count or no more ingredients for pitcher
+                            //if no more ingredients, do not sell anymore
+                //get number of customers who bought and add to player money
+                //find lemons and sugar that spoiled
             }
         }
 
@@ -100,9 +95,9 @@ namespace Lemonade_Stand
             }
             return daysList;
         }
-        public void DisplayNextDayWeather(int temp, string forecast)
+        public void DisplayNextDayWeather(string todayOrTomorrow, int temp, string forecast)
         {
-            Console.WriteLine("Tomorrow's Weather Forecast: " + temp + " & " + forecast);
+            Console.WriteLine(todayOrTomorrow + " Weather Forecast: " + temp + " & " + forecast);
         }
 
         public int PurchaseQuantity()
@@ -179,10 +174,6 @@ namespace Lemonade_Stand
 
             }
         }
-        //get current price/quantities and display
-        //select what to change
-        //set userInput as property
-
         public void SetPlayerControls(string settingToChange, int newSetting)
         {
             if (settingToChange == "2")

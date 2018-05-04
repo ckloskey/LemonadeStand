@@ -13,7 +13,7 @@ namespace Lemonade_Stand
         //forecast has effect on probability
         //buys or doesnt buy
 
-       private int cheapAssRating;
+       private double cheapnessRating;
        private Random random;
        private int randomMinRange;
        private int randomMaxRange;
@@ -21,45 +21,32 @@ namespace Lemonade_Stand
         public Customer()
         {
             this.random = new Random();
+            this.randomMinRange = MinTempRangeForCustomer();
+            this.randomMaxRange = MaxTempRangeForCustomer();
+            this.cheapnessRating = HowCheapIsThisPerson();
+        }
+        public int RandomMinRange { get => randomMinRange; set => randomMinRange = value; }
+        public int RandomMaxRange { get => randomMaxRange; set => randomMaxRange = value; }
+        public double CheapnessRating { get => cheapnessRating; set => cheapnessRating = value; }
+        
+        private int MinTempRangeForCustomer ()
+        {
+            randomMinRange = GenerateRandom(40, 60);
+            return randomMinRange;
+        }
+        private int MaxTempRangeForCustomer()
+        {
+            randomMaxRange = GenerateRandom(61, 116);
+            return randomMaxRange;
         }
 
-        public int RandomMinRange
+        private double HowCheapIsThisPerson()
         {
-            get
-            {
-                return randomMinRange;
-            }
-            set
-            {
-                randomMinRange = GenerateRandom(40, 60);
-            }
+            cheapnessRating = GenerateRandom(1, 90);
+            cheapnessRating = (cheapnessRating / 100);
+            return cheapnessRating;
         }
-        public int RandomMaxRange
-        {
-            get
-            {
-                return randomMaxRange;
-            }
-            set
-            {
-                randomMaxRange = GenerateRandom(61, 115);
-            }
-        }
-
-        public double CheapAssRating
-        {
-            get
-            {
-                return cheapAssRating;
-            }
-            set
-            {
-                cheapAssRating = GenerateRandom(1, 60);
-                cheapAssRating = (cheapAssRating / 100);
-            }
-        }
-
-        public int GenerateRandom(int min,int max)
+        private int GenerateRandom(int min,int max)
         {
             return random.Next(min, max);
         }

@@ -8,75 +8,25 @@ namespace Lemonade_Stand
 {
     class Player
     {
-        private double startingMoney;
-        private double pricePerCup;
-        private int lemonsPerPitcher;
-        private int sugarPerPitcher;
-        private int icePerCup;
+
         public Player()
         {
-            this.startingMoney = 20;
-            this.pricePerCup = 0;
-            this.lemonsPerPitcher = 0;
-            this.sugarPerPitcher = 0;
-            this.icePerCup = 0;
+            this.StartingMoney = 20;
+            this.PricePerCup = 0;
+            this.LemonsPerPitcher = 0;
+            this.SugarPerPitcher = 0;
+            this.IcePerCup = 0;
         }
 
-        public double StartingMoney
-        {
-            get
-            {
-                return startingMoney;
-            }
-            set
-            {
-                startingMoney = value;
-            }
-        }
-        public double PricePerCup
-        {
-            get
-            {
-                return pricePerCup;
-            }
-            set
-            {
-                pricePerCup = value;
-            }
-        }
+        public double StartingMoney { get; set; }
+        public double PricePerCup { get; set; }
 
-        public int LemonsPerPitcher
-        {
-            get
-            {
-                return lemonsPerPitcher;
-            }
-            set
-            {
-                lemonsPerPitcher = value;
-            }
-        }
-            public int SugarPerPitcher
-        {
-            get
-            {
-                return sugarPerPitcher;
-            }
-            set
-            {
-                sugarPerPitcher = value;
-            }
-        }
-        public int IcePerCup
-        {
-            get
-            {
-                return icePerCup;
-            }
-            set
-            {
-                icePerCup = value;
-            }
-        }
+        public int LemonsPerPitcher { get; set; }
+        public int SugarPerPitcher { get; set; }
+        public int IcePerCup { get; set; }
+
+        //cups per pitcher
+            //if IcePerCup <= 4, then cups/pitcher = 12
+            //if IcePerCup > 4, cups/pitcher = 18
     }
 }

@@ -8,62 +8,17 @@ namespace Lemonade_Stand
 {
     class Store
     {
-        private double lemonPrice;
-        private double sugarPrice;
-        private double cupsPrice;
-        private double iceCubePrice;
-
         public Store()
         {
-            lemonPrice = .06;
-            sugarPrice = .08;
-            cupsPrice = .04;
-            iceCubePrice = .07;
+            LemonPrice = .05;
+            SugarPrice = .06;
+            CupsPrice = .02;
+            IceCubePrice = .009;
         }
-        public double LemonPrice
-        {
-            get
-            {
-                return lemonPrice;
-            }
-            set
-            {
-                lemonPrice = value;
-            }
-        }
-        public double SugarPrice
-        {
-            get
-            {
-                return sugarPrice;
-            }
-            set
-            {
-                sugarPrice = value;
-            }
-        }
-        public double CupsPrice
-        {
-            get
-            {
-                return cupsPrice;
-            }
-            set
-            {
-                cupsPrice = value;
-            }
-        }
-        public double IceCubePrice
-        {
-            get
-            {
-                return iceCubePrice;
-            }
-            set
-            {
-                iceCubePrice = value;
-            }
-        }
+        public double LemonPrice { get; set; }
+        public double SugarPrice { get; set; }
+        public double CupsPrice { get; set; }
+        public double IceCubePrice { get; set; }
 
     }
 }

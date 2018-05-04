@@ -8,35 +8,76 @@ namespace Lemonade_Stand
 {
     class Day
     {
-        private string forecast;
-        private int temperature;
-        private Weather weather;
+        private string predictedForecast;
+        private int predictedTemperature;
+        private string actualForecast;
+        private int actualTemperature;
+        private Weather predictedWeather;
+        private Weather actualWeather;
         List<Customer> customerList = new List<Customer>();
         public Day()
         {
-            this.weather = new Weather();
-            this.Forecast = this.weather.GenerateRandomForecast();
-            this.Temperature = this.weather.GenerateRandomTemperature();
+            this.predictedWeather = new Weather();
+            this.predictedForecast = this.predictedWeather.GenerateRandomForecast();
+            this.predictedTemperature = this.predictedWeather.GenerateRandomTemperature();
+            this.actualWeather = new Weather();
+            this.actualForecast = actualWeather.GenerateRandomForecast();
+            this.actualTemperature = actualWeather.GenerateRandomTemperature((this.predictedTemperature - 8), (this.predictedTemperature + 8));
+            this.customerList = GenerateCustomerList();
         }
 
-        public string Forecast { get => forecast; set => forecast = value; }
-        public int Temperature { get => temperature; set => temperature = value; }
+        public string PredictedForecast { get => predictedForecast; set => predictedForecast = value; }
+        public int PredictedTemperature { get => predictedTemperature; set => predictedTemperature = value; }
+        public string ActualForecast { get => actualForecast; set => actualForecast = value; }
+        public int ActualTemperature { get => actualTemperature; set => actualTemperature = value; }
 
-        public List<Customer> GenerateCustomerList()
+        private List<Customer> GenerateCustomerList()
         {
-            Random random = new Random();
-            int dailyCustomers = random.Next(25, 125);
+            Random randomNumOfCustomers = new Random();
+            int min = MinRangeOfCustomersPerDay();
+            int max = MaxRangeOfCustomersPerDay();
+            int dailyCustomers = randomNumOfCustomers.Next(min, max);
             for (int i = 0; i <= dailyCustomers; i++)
             {
                 customerList.Add(new Customer());
             }
             return customerList;
         }
-        //subtract cups/ingredients per customer
-        //total sales
 
-        //EndOfDay Class?
-        //find spoiled lemons & sugar
-        //calculate profit and total moo-lah
+        private int MaxRangeOfCustomersPerDay()
+        {
+            int maxAmtOfCustomers = 125;
+            if (this.ActualForecast == "Rain")
+            {
+                maxAmtOfCustomers -= 40;
+            }
+            else if (this.ActualForecast == "Light Rain")
+            {
+                maxAmtOfCustomers -= 25;
+            }
+            else if(this.ActualTemperature < 68)
+            {
+                maxAmtOfCustomers -= 40;
+            }
+            else
+            {
+                maxAmtOfCustomers = 125;
+            }
+            return maxAmtOfCustomers;
+        }
+
+        private int MinRangeOfCustomersPerDay()
+        {
+            int minAmtOfCustomers = 45;
+            if (this.ActualTemperature >= 68)
+            {
+                minAmtOfCustomers += 35;
+            }
+            else
+            {
+                minAmtOfCustomers = 45;
+            }
+            return minAmtOfCustomers;
+        }
     }
 }
