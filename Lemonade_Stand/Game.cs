@@ -9,7 +9,6 @@ namespace Lemonade_Stand
     class Game
     {
         UserInterface userInterface;
-        Weather weather;
         Store store;
         Inventory inventory;
         Player player;
@@ -18,7 +17,7 @@ namespace Lemonade_Stand
         public int duration;
         public Game()
         {
-            this.weather = new Weather();
+
             this.userInterface = new UserInterface();
             this.store = new Store();
             this.inventory = new Inventory();
@@ -75,15 +74,36 @@ namespace Lemonade_Stand
                 temperatureForTomorrow = tomorrow.ActualTemperature;
                 forecastForTomorrow = tomorrow.ActualForecast;
                 DisplayNextDayWeather("Today's",temperatureForTomorrow, forecastForTomorrow);
-                
-                //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++
-                //calculate how many cups/pitcher from recipe
-                    //when soldCup++ == cups/pitcher, make new pitcher and subtract from inventory
-                        //loop until customerList.Count or no more ingredients for pitcher
-                            //if no more ingredients, do not sell anymore
-                //get number of customers who bought and add to player money
-                //find lemons and sugar that spoiled
+
+                while (!SoldOut())
+                {
+                    SetInInventory("1", -(player.LemonsPerPitcher));
+                    SetInInventory("2", -(player.SugarPerPitcher));
+                    
+                    //for every cups/pitcher, subtract ingredients from inventory
+                    //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++
+                    //when (soldCup % cups/pitcher == 0), make new pitcher and subtract from inventory
+
+
+                    //loop until customerList.Count or no more ingredients for pitcher
+                    //if no more ingredients, do not sell anymore
+                    //get number of customers who bought and add to player money
+                    //find lemons and sugar that spoiled
+                }
             }
+        }
+
+        public bool SoldOut()
+        {
+            bool isSoldOut = false;
+            if ((player.LemonsPerPitcher > inventory.TotalLemonsInInventory)
+                || (player.SugarPerPitcher > inventory.TotalSugarInInventory)
+                || (player.IcePerCup > inventory.IcecubesInInventory)
+                || (player.CupsPerPitcher > inventory.CupsInInventory))
+            {
+                isSoldOut = true;
+            }
+            return isSoldOut;
         }
 
         public List<Day> GenerateDays(int duration)
@@ -151,23 +171,23 @@ namespace Lemonade_Stand
             }
         }
 
-        public void SetInInventory(string itemPurchased, int purchaseQuantity)
+        public void SetInInventory(string item, int quantity)
         {
-            if (itemPurchased == "1")
+            if (item == "1")
             {
-                inventory.LemonsInInventory.Add(purchaseQuantity);
+                inventory.LemonsInInventory.Add(quantity);
             }
-            else if (itemPurchased == "2")
+            else if (item == "2")
             {
-                inventory.SugarInInventory.Add(purchaseQuantity);
+                inventory.SugarInInventory.Add(quantity);
             }
-            else if (itemPurchased == "3")
+            else if (item == "3")
             {
-                inventory.CupsInInventory = (inventory.CupsInInventory + purchaseQuantity);
+                inventory.CupsInInventory = (inventory.CupsInInventory + quantity);
             }
-            else if (itemPurchased == "4")
+            else if (item == "4")
             {
-                inventory.IcecubesInInventory = (inventory.IcecubesInInventory + purchaseQuantity);
+                inventory.IcecubesInInventory = (inventory.IcecubesInInventory + quantity);
             }
             else
             {
@@ -190,11 +210,10 @@ namespace Lemonade_Stand
             }
             else
             {
-
+                player.CalculateCupsPerPitcher();
             }
         }
 
-        //4 Price/Quality control
         //5 Start Selling to customers
         //6 calculate EOD profits
     }
