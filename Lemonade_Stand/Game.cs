@@ -14,8 +14,7 @@ namespace Lemonade_Stand
         Store store;
         Inventory inventory;
         Player player;
-        List<int> temperatureForGamePlay;
-        List<string> forecastForGamePlay;
+        List<Day> gameDayList;
 
         public int duration;
         public Game()
@@ -25,17 +24,21 @@ namespace Lemonade_Stand
             this.store = new Store();
             this.inventory = new Inventory();
             this.player = new Player();
+            this.gameDayList = new List<Day>();
         }
 
         public void RunGame()
         {
             duration = userInterface.AskForDuration();
+            gameDayList = GenerateDays(duration);
+
             for (int i = 0; i < duration; i++)
             {
                 //generate weather
-                temperatureForGamePlay = weather.GenerateRandomTemperature(duration);
-                forecastForGamePlay = weather.GenerateRandomForecast(duration);
-                DisplayNextDayWeather(temperatureForGamePlay, forecastForGamePlay, i);
+                Day tomorrow = gameDayList[i];
+                int temperatureForTomorrow = tomorrow.Temperature;
+                string forecastForTomorrow = tomorrow.Forecast;
+                DisplayNextDayWeather(temperatureForTomorrow, forecastForTomorrow);
 
                 //purchase segment
                 string purchasing = null;
@@ -83,15 +86,23 @@ namespace Lemonade_Stand
                 }
 
 
+
                 Console.WriteLine("Day: " + (i + 1));
             }
         }
 
-        public void DisplayNextDayWeather(List<int> weeklyTemperature, List<string> weeklyForecast, int day)
+        public List<Day> GenerateDays(int duration)
         {
-            int NextDayTemp = weeklyTemperature[day + 1];
-            string NextDayForecast = weeklyForecast[day + 1];
-            Console.WriteLine("Tomorrow's Weather Forecast: " + NextDayTemp + " & " + NextDayForecast);
+            List<Day> daysList = new List<Day>();
+            for (int i = 0; i < duration; i++)
+            {
+                daysList.Add(new Day());
+            }
+            return daysList;
+        }
+        public void DisplayNextDayWeather(int temp, string forecast)
+        {
+            Console.WriteLine("Tomorrow's Weather Forecast: " + temp + " & " + forecast);
         }
 
         public int PurchaseQuantity()
