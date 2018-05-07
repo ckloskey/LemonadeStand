@@ -48,10 +48,14 @@ namespace Lemonade_Stand
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
                     double itemCost = GetFromStore(purchasing, purchaseQuantity);
-                    SubtractFromPlayerTotal(CalculateCost(itemCost, purchaseQuantity));
-                    SetInInventory(purchasing, purchaseQuantity);
+
+                    if (PlayerHasEnoughMoney(CalculateCost(itemCost, purchaseQuantity)) == true)
+                    {
+                        SetInInventory(purchasing, purchaseQuantity);
+                    }
+                    
                 }
-               string changeSetting = null;
+                string changeSetting = null;
                 while (changeSetting != "5")
                 {
                     //price/qualitycontrol segment
@@ -81,38 +85,72 @@ namespace Lemonade_Stand
                 DisplayNextDayWeather("Today's", temperatureForTomorrow, forecastForTomorrow);
 
                 int salesCounter = 0;
-
-                while (!SoldOut() && (inventory.IcecubesInInventory > 0) && (inventory.CupsInInventory > 0) )
+                //while (!SoldOut())
+                //{
+                if (SoldOut() == false)
                 {
-                    foreach(Customer person in tomorrow.CustomerList)
+                    foreach (Customer person in tomorrow.CustomerList)
                     {
                         if (SoldCup(person, tomorrow) == true)
                         {
-                            SetInInventory("3", -(player.IcePerCup));
-                            SetInInventory("4", -1);
+                            SetInInventory("3", -1);
+                            SetInInventory("4", -(player.IcePerCup));
                             salesCounter++;
                             if (salesCounter % player.CupsPerPitcher == 0)
                             {
-                                SoldOut();
+                                if (SoldOut() == true) { break; }
                             }
                         }
+                        if ((inventory.IcecubesInInventory <= 0)
+                        || (inventory.CupsInInventory <= 0)) { break; }
                     }
-
                 }
+                //}
 
                 player.DailyTotal = (salesCounter * player.PricePerCup);
+                player.RunningTotal = (player.RunningTotal + player.DailyTotal);
+                player.StartingMoney = player.StartingMoney + player.DailyTotal;
                 Console.WriteLine("End of Day Report");
                 Console.WriteLine("You had " + salesCounter + " customers out of a potential " + tomorrow.CustomerList.Count());
                 Console.WriteLine("Total revenue: " + player.DailyTotal);
-                    //find lemons and sugar that spoiled
+                FindExpiredLemons(i);
+                FindExpiredSugar(i);
+                SetInInventory("4", -(inventory.IcecubesInInventory));
+                Console.WriteLine("The rest of your ice has melted");
+            }
+        }
+
+        public void FindExpiredLemons(int day)
+        {
+            int difference = 0;
+            int before = inventory.LemonsInInventory.Count();
+            inventory.LemonsInInventory.RemoveAll(i => i.Expiration == day);
+            int after = inventory.LemonsInInventory.Count();
+            difference = before - after;
+            if (difference > 0)
+            {
+                Console.WriteLine(difference + " of your lemons have spoiled");
+            }
+        }
+
+        public void FindExpiredSugar(int day)
+        {
+            int difference = 0;
+            int before = inventory.LemonsInInventory.Count();
+            inventory.SugarInInventory.RemoveAll(i => i.Expiration == day);
+            int after = inventory.SugarInInventory.Count();
+            difference = before - after;
+            if (difference > 0)
+            {
+                Console.WriteLine(difference + " cups of Sugar have expired");
             }
         }
 
         public bool SoldCup(Customer person, Day dayInfo)
         {
             if (
-                (player.PricePerCup < person.CheapnessRating ) && 
-                ((person.RandomMinRange > dayInfo.ActualTemperature) && (dayInfo.ActualTemperature <= person.RandomMaxRange))
+                (player.PricePerCup <= person.CheapnessRating ) && 
+                ((person.RandomMinRange <= dayInfo.ActualTemperature) && (dayInfo.ActualTemperature <= person.RandomMaxRange))
                 )
             {
                 return true;
@@ -194,15 +232,17 @@ namespace Lemonade_Stand
             return totalItemcost;
         }
 
-        public void SubtractFromPlayerTotal(double costOfPurchase)
+        public bool PlayerHasEnoughMoney(double costOfPurchase)
         {
             if (costOfPurchase > player.StartingMoney)
             {
                 Console.WriteLine("Can not purchase that amount. Please reduce quantity");
+                return false;
             }
             else
             {
                 player.StartingMoney = (player.StartingMoney - costOfPurchase);
+                return true;
             }
         }
 

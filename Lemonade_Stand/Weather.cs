@@ -17,7 +17,7 @@ namespace Lemonade_Stand
             this.randomForecast = new Random();
         }
 
-        public int GenerateRandomTemperature(int minTemp = 40, int maxTemp = 106)
+        public int GenerateRandomTemperature(int minTemp = 45, int maxTemp = 106)
         {
             return GenerateRandom.GetRandom(minTemp, maxTemp);
         }
