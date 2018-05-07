@@ -8,20 +8,18 @@ namespace Lemonade_Stand
 {
     class Weather
     {
-        private Random randomTemp;
         private Random randomForecast;
         private List<string> allForecasts;
 
         public Weather()
         {
             this.allForecasts = new List<string> { "Clear", "Rain", "Cloudy", "Humid", "Clear", "Light Rain" };
-            this.randomTemp = new Random();
             this.randomForecast = new Random();
         }
 
         public int GenerateRandomTemperature(int minTemp = 40, int maxTemp = 106)
         {
-            return randomTemp.Next(minTemp, maxTemp);
+            return GenerateRandom.GetRandom(minTemp, maxTemp);
         }
         public string GenerateRandomForecast()
         {

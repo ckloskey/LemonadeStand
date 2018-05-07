@@ -55,9 +55,13 @@ namespace Lemonade_Stand
                 while (changeSetting != "5")
                 {
                     //price/qualitycontrol segment
-                    Console.WriteLine("Price/Quality Control ==> Price/Cup: " + player.PricePerCup + " Lemons/Pitcher: " + player.LemonsPerPitcher + " Sugar/Pitcher: " + player.SugarPerPitcher + " Ice Cubes/Cup :" + player.IcePerCup);
+                    Console.WriteLine("Price/Quality Control ==> Price/Cup: " + player.PricePerCup + " Lemons/Pitcher: " + player.LemonsPerPitcher + " Sugar/Pitcher: " + player.SugarPerPitcher + " Ice Cubes/Cup: " + player.IcePerCup);
                     changeSetting = userInterface.QualityControlMenu();
-                    if (changeSetting == "5") { break; }
+                    if (changeSetting == "5")
+                    {
+                        player.CalculateCupsPerPitcher();
+                        break;
+                    }
                     new Supply().DayPurchased = i;
                     if (changeSetting == "1")
                     {
@@ -74,38 +78,32 @@ namespace Lemonade_Stand
                 Console.WriteLine("Day: " + (i + 1));
                 temperatureForTomorrow = tomorrow.ActualTemperature;
                 forecastForTomorrow = tomorrow.ActualForecast;
-                DisplayNextDayWeather("Today's",temperatureForTomorrow, forecastForTomorrow);
+                DisplayNextDayWeather("Today's", temperatureForTomorrow, forecastForTomorrow);
 
                 int salesCounter = 0;
-                foreach (Customer person in tomorrow.CustomerList)
+
+                while (!SoldOut() && (inventory.IcecubesInInventory > 0) && (inventory.CupsInInventory > 0) )
                 {
-                    if (!SoldOut())
+                    foreach(Customer person in tomorrow.CustomerList)
                     {
-                        if (salesCounter % player.CupsPerPitcher == 0)
+                        if (SoldCup(person, tomorrow) == true)
                         {
-                            SetInInventory("1", -(player.LemonsPerPitcher));
-                            SetInInventory("2", -(player.SugarPerPitcher));
+                            SetInInventory("3", -(player.IcePerCup));
+                            SetInInventory("4", -1);
+                            salesCounter++;
+                            if (salesCounter % player.CupsPerPitcher == 0)
+                            {
+                                SoldOut();
+                            }
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
 
-                    if (SoldCup(person, tomorrow) == true)
-                    {
-                        SetInInventory("3", -(player.IcePerCup));
-                        SetInInventory("4", -1);
-                        salesCounter++;
-                    }
                 }
-                    //for every cups/pitcher, subtract ingredients from inventory (X)
-                    //if SoldOut == true, end day. (X)
-                    //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++ (X)
-                    //when (salesCounter % cupsPerPitcher == 0), make new pitcher and subtract from inventory (X)
 
-                    //get number of customers who bought and add to player money
-                        //  player.DailyTotal = salesCounter* player.PricePerCup
+                player.DailyTotal = (salesCounter * player.PricePerCup);
+                Console.WriteLine("End of Day Report");
+                Console.WriteLine("You had " + salesCounter + " customers out of a potential " + tomorrow.CustomerList.Count());
+                Console.WriteLine("Total revenue: " + player.DailyTotal);
                     //find lemons and sugar that spoiled
             }
         }
@@ -114,7 +112,7 @@ namespace Lemonade_Stand
         {
             if (
                 (player.PricePerCup < person.CheapnessRating ) && 
-                ((person.RandomMinRange < dayInfo.ActualTemperature) && (dayInfo.ActualTemperature <= person.RandomMaxRange))
+                ((person.RandomMinRange > dayInfo.ActualTemperature) && (dayInfo.ActualTemperature <= person.RandomMaxRange))
                 )
             {
                 return true;
@@ -134,9 +132,14 @@ namespace Lemonade_Stand
                 || (player.CupsPerPitcher > inventory.CupsInInventory))
             {
                 isSoldOut = true;
+                return isSoldOut;
             }
+                
+            SetInInventory("1", -(player.LemonsPerPitcher));
+            SetInInventory("2", -(player.SugarPerPitcher));
             return isSoldOut;
         }
+
 
         public List<Day> GenerateDays(int duration)
         {
@@ -269,7 +272,7 @@ namespace Lemonade_Stand
             }
             else
             {
-                player.CalculateCupsPerPitcher();
+
             }
         }
     }

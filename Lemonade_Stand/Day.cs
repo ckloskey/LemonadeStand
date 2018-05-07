@@ -17,13 +17,14 @@ namespace Lemonade_Stand
         List<Customer> customerList = new List<Customer>();
         public Day()
         {
+            this.customerList = GenerateCustomerList();
             this.predictedWeather = new Weather();
             this.predictedForecast = this.predictedWeather.GenerateRandomForecast();
             this.predictedTemperature = this.predictedWeather.GenerateRandomTemperature();
             this.actualWeather = new Weather();
             this.actualForecast = actualWeather.GenerateRandomForecast();
             this.actualTemperature = actualWeather.GenerateRandomTemperature((this.predictedTemperature - 8), (this.predictedTemperature + 8));
-            this.customerList = GenerateCustomerList();
+            
         }
 
         public string PredictedForecast { get => predictedForecast; set => predictedForecast = value; }
@@ -34,10 +35,9 @@ namespace Lemonade_Stand
 
         private List<Customer> GenerateCustomerList()
         {
-            Random randomNumOfCustomers = new Random();
             int min = MinRangeOfCustomersPerDay();
             int max = MaxRangeOfCustomersPerDay();
-            int dailyCustomers = randomNumOfCustomers.Next(min, max);
+            int dailyCustomers = GenerateRandom.GetRandom(min, max);
             for (int i = 0; i <= dailyCustomers; i++)
             {
                 customerList.Add(new Customer());

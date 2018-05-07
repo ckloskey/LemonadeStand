@@ -16,8 +16,6 @@ namespace Lemonade_Stand
 
         public int DayPurchased { get; set; }
 
-        public int QuantityPurchased { get; set; }
-
         public int Expiration { get; set; }
     }
 }
