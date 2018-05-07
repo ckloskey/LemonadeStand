@@ -47,7 +47,7 @@ namespace Lemonade_Stand
                     purchasing = userInterface.PurchasingMenu();
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
-                    double itemCost = GetFromStore(purchasing);
+                    double itemCost = GetFromStore(purchasing, purchaseQuantity);
                     SubtractFromPlayerTotal(CalculateCost(itemCost, purchaseQuantity));
                     SetInInventory(purchasing, purchaseQuantity);
                 }
@@ -58,6 +58,7 @@ namespace Lemonade_Stand
                     Console.WriteLine("Price/Quality Control ==> Price/Cup: " + player.PricePerCup + " Lemons/Pitcher: " + player.LemonsPerPitcher + " Sugar/Pitcher: " + player.SugarPerPitcher + " Ice Cubes/Cup :" + player.IcePerCup);
                     changeSetting = userInterface.QualityControlMenu();
                     if (changeSetting == "5") { break; }
+                    new Supply().DayPurchased = i;
                     if (changeSetting == "1")
                     {
                         double newPrice = userInterface.PromptForPrice();
@@ -75,21 +76,52 @@ namespace Lemonade_Stand
                 forecastForTomorrow = tomorrow.ActualForecast;
                 DisplayNextDayWeather("Today's",temperatureForTomorrow, forecastForTomorrow);
 
-                while (!SoldOut())
+                int salesCounter = 0;
+                foreach (Customer person in tomorrow.CustomerList)
                 {
-                    SetInInventory("1", -(player.LemonsPerPitcher));
-                    SetInInventory("2", -(player.SugarPerPitcher));
-                    
-                    //for every cups/pitcher, subtract ingredients from inventory
-                    //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++
-                    //when (soldCup % cups/pitcher == 0), make new pitcher and subtract from inventory
+                    if (!SoldOut())
+                    {
+                        if (salesCounter % player.CupsPerPitcher == 0)
+                        {
+                            SetInInventory("1", -(player.LemonsPerPitcher));
+                            SetInInventory("2", -(player.SugarPerPitcher));
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
 
-
-                    //loop until customerList.Count or no more ingredients for pitcher
-                    //if no more ingredients, do not sell anymore
-                    //get number of customers who bought and add to player money
-                    //find lemons and sugar that spoiled
+                    if (SoldCup(person, tomorrow) == true)
+                    {
+                        SetInInventory("3", -(player.IcePerCup));
+                        SetInInventory("4", -1);
+                        salesCounter++;
+                    }
                 }
+                    //for every cups/pitcher, subtract ingredients from inventory (X)
+                    //if SoldOut == true, end day. (X)
+                    //for each customer in day, if (price < cheapnessRating) && (day.actualTemp > customer.MinTemp) then soldCup++ (X)
+                    //when (salesCounter % cupsPerPitcher == 0), make new pitcher and subtract from inventory (X)
+
+                    //get number of customers who bought and add to player money
+                        //  player.DailyTotal = salesCounter* player.PricePerCup
+                    //find lemons and sugar that spoiled
+            }
+        }
+
+        public bool SoldCup(Customer person, Day dayInfo)
+        {
+            if (
+                (player.PricePerCup < person.CheapnessRating ) && 
+                ((person.RandomMinRange < dayInfo.ActualTemperature) && (dayInfo.ActualTemperature <= person.RandomMaxRange))
+                )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -126,7 +158,7 @@ namespace Lemonade_Stand
             return purchaseQuantity;
         }
 
-        public double GetFromStore(string itemBeingPurchased)
+        public double GetFromStore(string itemBeingPurchased, int purchaseQuantity)
         {
             double cost;
             if (itemBeingPurchased == "1")
@@ -173,13 +205,40 @@ namespace Lemonade_Stand
 
         public void SetInInventory(string item, int quantity)
         {
+            
             if (item == "1")
             {
-                inventory.LemonsInInventory.Add(quantity);
+                if (quantity > 0)
+                {
+                    for (int i = 1; i <= quantity; i++)
+                    {
+                        inventory.LemonsInInventory.Add(new Lemon());
+                    }
+                }
+                else
+                {
+                    for (int i = 1; i <= Math.Abs(quantity); i++)
+                    {
+                        inventory.LemonsInInventory.RemoveAt(0);
+                    }
+                }
             }
             else if (item == "2")
             {
-                inventory.SugarInInventory.Add(quantity);
+                if (quantity > 0)
+                {
+                    for (int i = 1; i <= quantity; i++)
+                    {
+                        inventory.SugarInInventory.Add(new Sugar());
+                    }
+                }
+                else
+                {
+                    for (int i = 1; i <= Math.Abs(quantity); i++)
+                    {
+                        inventory.SugarInInventory.RemoveAt(0);
+                    }
+                }
             }
             else if (item == "3")
             {
@@ -213,8 +272,5 @@ namespace Lemonade_Stand
                 player.CalculateCupsPerPitcher();
             }
         }
-
-        //5 Start Selling to customers
-        //6 calculate EOD profits
     }
 }

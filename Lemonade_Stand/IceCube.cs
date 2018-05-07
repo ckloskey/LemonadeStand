@@ -10,7 +10,7 @@ namespace Lemonade_Stand
     {
         public IceCube()
         {
-
+            this.Expiration = DayPurchased + 0;
         }
     }
 }

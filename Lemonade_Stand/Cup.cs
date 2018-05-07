@@ -10,7 +10,7 @@ namespace Lemonade_Stand
     {
         public Cup()
         {
-
+            
         }
 
     }

@@ -30,6 +30,7 @@ namespace Lemonade_Stand
         public int PredictedTemperature { get => predictedTemperature; set => predictedTemperature = value; }
         public string ActualForecast { get => actualForecast; set => actualForecast = value; }
         public int ActualTemperature { get => actualTemperature; set => actualTemperature = value; }
+        public List <Customer> CustomerList { get => customerList; set => customerList = value; }
 
         private List<Customer> GenerateCustomerList()
         {

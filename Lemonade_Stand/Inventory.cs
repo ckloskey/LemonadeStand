@@ -10,21 +10,21 @@ namespace Lemonade_Stand
     {
         public Inventory()
         {
-            this.LemonsInInventory = new List<int>();
-            this.SugarInInventory = new List<int>();
+            this.LemonsInInventory = new List<Lemon>();
+            this.SugarInInventory = new List<Sugar>();
             this.CupsInInventory = 0;
             this.IcecubesInInventory = 0;
         }
 
-        public List<int> LemonsInInventory { get; set; }
-        public List<int> SugarInInventory { get; set; }
+        public List<Lemon> LemonsInInventory { get; set; }
+        public List<Sugar> SugarInInventory { get; set; }
         public int CupsInInventory { get; set; }
         public int IcecubesInInventory { get; set; }
         public int TotalLemonsInInventory
         {
             get
             {
-                int total = LemonsInInventory.Sum();
+                int total = LemonsInInventory.Count();
                 return total;
             }
         }
@@ -33,7 +33,7 @@ namespace Lemonade_Stand
         {
             get
             {
-                int total = SugarInInventory.Sum();
+                int total = SugarInInventory.Count();
                 return total;
             }
         }

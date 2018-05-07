@@ -8,48 +8,16 @@ namespace Lemonade_Stand
 {
     class Supply
     {
-        private int dayPurchased;
-        private int quantityPurchased;
-        private int expiration;
+
         public Supply()
         {
 
         }
 
-        public int DayPurchased
-        {
-            get
-            {
-                return dayPurchased;
-            }
-            set
-            {
-                dayPurchased = value;
-            }
-        }
+        public int DayPurchased { get; set; }
 
-        public int QuantityPurchased
-        {
-            get
-            {
-                return quantityPurchased;
-            }
-            set
-            {
-                quantityPurchased = value;
-            }
-        }
+        public int QuantityPurchased { get; set; }
 
-        public int Expiration
-        {
-            get
-            {
-                return expiration;
-            }
-            set
-            {
-                expiration = value;
-            }
-        }
+        public int Expiration { get; set; }
     }
 }

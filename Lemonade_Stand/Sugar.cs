@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Lemonade_Stand
 {
 
-    class Sugar
+    class Sugar : Supply
     {
         public Sugar()
         {
-
+            this.Expiration = DayPurchased + 3;
         }
     }
 }

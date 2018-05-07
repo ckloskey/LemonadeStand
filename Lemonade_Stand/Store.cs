@@ -13,7 +13,7 @@ namespace Lemonade_Stand
             LemonPrice = .05;
             SugarPrice = .06;
             CupsPrice = .02;
-            IceCubePrice = .009;
+            IceCubePrice = .01;
         }
         public double LemonPrice { get; set; }
         public double SugarPrice { get; set; }
