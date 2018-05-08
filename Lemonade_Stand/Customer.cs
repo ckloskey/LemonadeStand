@@ -29,7 +29,7 @@ namespace Lemonade_Stand
         }
         private int MaxTempRangeForCustomer()
         {
-            randomMaxRange = GenerateRandom.GetRandom(61, 116);
+            randomMaxRange = GenerateRandom.GetRandom(61, 125);
             return randomMaxRange;
         }
 

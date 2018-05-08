@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Data.OleDb;
+using System.IO;
 
 namespace Lemonade_Stand
 {
@@ -17,7 +21,6 @@ namespace Lemonade_Stand
         public int duration;
         public Game()
         {
-
             this.userInterface = new UserInterface();
             this.store = new Store();
             this.inventory = new Inventory();
@@ -43,7 +46,7 @@ namespace Lemonade_Stand
                 while (purchasing != "5")
                 {
                     Console.WriteLine("Money: " + player.StartingMoney);
-                    Console.WriteLine("Inventory ==> Lemons: " + inventory.TotalLemonsInInventory + " Sugar: " + inventory.TotalSugarInInventory + " Cups: " + inventory.CupsInInventory + " Ice Cubes :" + inventory.IcecubesInInventory);
+                    Console.WriteLine("Inventory ==> Lemons: " + inventory.TotalLemonsInInventory + " Sugar: " + inventory.TotalSugarInInventory + " Cups: " + inventory.CupsInInventory + " Ice Cubes: " + inventory.IcecubesInInventory);
                     purchasing = userInterface.PurchasingMenu();
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
@@ -84,9 +87,8 @@ namespace Lemonade_Stand
                 forecastForTomorrow = tomorrow.ActualForecast;
                 DisplayNextDayWeather("Today's", temperatureForTomorrow, forecastForTomorrow);
 
+                //Day starts and selling begins
                 int salesCounter = 0;
-                //while (!SoldOut())
-                //{
                 if (SoldOut() == false)
                 {
                     foreach (Customer person in tomorrow.CustomerList)
@@ -105,7 +107,6 @@ namespace Lemonade_Stand
                         || (inventory.CupsInInventory <= 0)) { break; }
                     }
                 }
-                //}
 
                 player.DailyTotal = (salesCounter * player.PricePerCup);
                 player.RunningTotal = (player.RunningTotal + player.DailyTotal);
@@ -118,6 +119,8 @@ namespace Lemonade_Stand
                 SetInInventory("4", -(inventory.IcecubesInInventory));
                 Console.WriteLine("The rest of your ice has melted");
             }
+
+            SaveHighScore(player.StartingMoney);
         }
 
         public void FindExpiredLemons(int day)
@@ -136,7 +139,7 @@ namespace Lemonade_Stand
         public void FindExpiredSugar(int day)
         {
             int difference = 0;
-            int before = inventory.LemonsInInventory.Count();
+            int before = inventory.SugarInInventory.Count();
             inventory.SugarInInventory.RemoveAll(i => i.Expiration == day);
             int after = inventory.SugarInInventory.Count();
             difference = before - after;
@@ -160,7 +163,6 @@ namespace Lemonade_Stand
                 return false;
             }
         }
-
         public bool SoldOut()
         {
             bool isSoldOut = false;
@@ -177,7 +179,6 @@ namespace Lemonade_Stand
             SetInInventory("2", -(player.SugarPerPitcher));
             return isSoldOut;
         }
-
 
         public List<Day> GenerateDays(int duration)
         {
@@ -314,6 +315,35 @@ namespace Lemonade_Stand
             {
 
             }
+        }
+        public void SaveHighScore(double score)
+        {
+            string accessdbPath = Path.GetFullPath("Lemonade_Stand.accdb");
+            Console.WriteLine("Write Name for High Score");
+            string name = Console.ReadLine();
+                using (OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + accessdbPath))
+                {
+                    using (OleDbCommand command = conn.CreateCommand())
+                    {
+                    command.Connection = conn;
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = @"INSERT INTO high_score(Name,Score) 
+                            VALUES(@param1,@param2)";
+
+                    command.Parameters.AddWithValue("@param1", name);
+                    command.Parameters.AddWithValue("@param2", score);
+
+                        try
+                        {
+                            conn.Open();
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException e)
+                        {
+                        Console.WriteLine("Could not open database file");
+                        }
+                    }
+                }
         }
     }
 }
