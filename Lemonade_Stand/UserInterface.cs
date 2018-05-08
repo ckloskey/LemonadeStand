@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lemonade_Stand
 {
@@ -10,6 +7,8 @@ namespace Lemonade_Stand
     {
         List<string> validDurationOptions = new List<string> { "7", "14", "21" };
         List<string> validResponses = new List<string>{ "1", "2", "3", "4", "5" };
+        List<string> validAmountOfPlayers = new List<string> { "1", "2" };
+        List<string> validUserTypes = new List<string> { "human","computer" };
         public int AskForDuration()
         {
             string gameOption;
@@ -20,6 +19,23 @@ namespace Lemonade_Stand
             } while (ValidUserInput(gameOption, validDurationOptions) == false);
             int duration = Int32.Parse(gameOption);
             return duration;
+        }
+        public string AskForNumberOfPlayers()
+        {
+            string numOfPlayers;
+            do
+            {
+              numOfPlayers = PromptUserInput("How Many Players are Playing");
+            } while (ValidUserInput(numOfPlayers, validAmountOfPlayers) == false);
+            return numOfPlayers;
+        }
+
+        public string AskForPlayerType()
+        { string secondPlayer;
+            do {
+                secondPlayer = PromptUserInput("Is second player a 'human' or 'computer'?").ToLower();
+            } while (ValidUserInput(secondPlayer, validUserTypes) == false);
+            return secondPlayer;
         }
 
         public string PromptUserInput(string promptMessage)
@@ -38,7 +54,6 @@ namespace Lemonade_Stand
             } while (ValidUserInput(purchasing, validResponses) == false);
             return purchasing;
         }
-
         public string QualityControlMenu()
         {
             string updateQualityControl;

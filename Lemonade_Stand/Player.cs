@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lemonade_Stand
+﻿namespace Lemonade_Stand
 {
     class Player
     {
+        public Inventory inventory = new Inventory();
+
         public Player()
         {
             this.StartingMoney = 20;
@@ -28,7 +24,9 @@ namespace Lemonade_Stand
         public int CupsPerPitcher { get; set; }
         public double DailyTotal { get; set; }
         public double RunningTotal { get; set; }
-        public void CalculateCupsPerPitcher()
+        public Inventory Inventory { get; set; }
+
+        public virtual void CalculateCupsPerPitcher(int playerIcePerCup)
         {
             if (this.IcePerCup <= 4)
             {

@@ -42,11 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Computer.cs" />
     <Compile Include="Cup.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Day.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GenerateRandom.cs" />
+    <Compile Include="Human.cs" />
     <Compile Include="IceCube.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Lemon.cs" />
