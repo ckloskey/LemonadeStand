@@ -8,11 +8,17 @@ namespace Lemonade_Stand
 {
     public class UserInterface
     {
+        List<string> validDurationOptions = new List<string> { "7", "14", "21" };
         List<string> validResponses = new List<string>{ "1", "2", "3", "4", "5" };
         public int AskForDuration()
         {
-            Console.WriteLine("How many days will the stand be open: 7, 14, or 21?");
-            int duration = Int32.Parse(Console.ReadLine());
+            string gameOption;
+            do
+            {
+                Console.WriteLine("How many days will the stand be open: 7, 14, or 21?");
+                gameOption = Console.ReadLine();
+            } while (ValidUserInput(gameOption, validDurationOptions) == false);
+            int duration = Int32.Parse(gameOption);
             return duration;
         }
 
@@ -29,7 +35,7 @@ namespace Lemonade_Stand
             do
             {
                 purchasing = PromptUserInput("Purchase\n1: Lemons\n2: Sugar\n3: Cups\n4: Ice cubes\n5: Done");
-            } while (ValidUserInput(purchasing) == false);
+            } while (ValidUserInput(purchasing, validResponses) == false);
             return purchasing;
         }
 
@@ -39,25 +45,37 @@ namespace Lemonade_Stand
             do
             {
                updateQualityControl = PromptUserInput("Price/Quality Control\n1: Price Per Cup\n2: Lemons Per Pitcher\n3: Sugar Per Pitcher\n4: Ice cubes Per Cup\n5: Done");
-            } while (ValidUserInput(updateQualityControl) == false);
+            } while (ValidUserInput(updateQualityControl, validResponses) == false);
             return updateQualityControl;
         }
         
         public int PromptForQuantity()
         {
-            int quantity = Int32.Parse(PromptUserInput("Quantity?"));
+            int quantity;
+            string userInput;
+            do
+            {
+                userInput = PromptUserInput("Quantity? (whole numbers)");
+            } while (!CheckForInt(userInput));
+            quantity = Int32.Parse(userInput);
             return quantity;
         }
 
-        public Double PromptForPrice()
+        public bool CheckForInt(string input)
         {
-            double quantity = double.Parse(PromptUserInput("Price?"));
+            bool inputGood = int.TryParse(input, out int i);
+            return inputGood;
+        }
+
+        public double PromptForPrice()
+        {
+            double quantity = double.Parse(PromptUserInput("Set Price: (No Customer will buy over 90cents, keep it reasonable)"));
             return quantity;
         }
-        public bool ValidUserInput(string input)
+
+        public bool ValidUserInput(string input, List<string> options)
         {
-            //validInput = validResponses.Contains(input) ? true : false;
-            if (validResponses.Contains(input))
+            if (options.Contains(input))
             {
                 return true;
             }

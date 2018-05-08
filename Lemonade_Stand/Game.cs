@@ -338,7 +338,7 @@ namespace Lemonade_Stand
                             conn.Open();
                             command.ExecuteNonQuery();
                         }
-                        catch (SqlException e)
+                        catch (SqlException)
                         {
                         Console.WriteLine("Could not open database file");
                         }
