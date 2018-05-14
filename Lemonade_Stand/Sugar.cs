@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Lemonade_Stand
 {
 
-    class Sugar : Supply
+    public class Sugar : Supply
     {
         public Sugar()
         {

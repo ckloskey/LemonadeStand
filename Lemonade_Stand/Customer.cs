@@ -1,6 +1,6 @@
 ﻿namespace Lemonade_Stand
 {
-    class Customer
+    public class Customer
     {
        private double cheapnessRating;
        private int randomMinRange;

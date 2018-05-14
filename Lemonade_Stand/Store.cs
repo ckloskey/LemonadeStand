@@ -1,7 +1,7 @@
 ﻿
 namespace Lemonade_Stand
 {
-    class Store
+    public class Store
     {
         public Store()
         {

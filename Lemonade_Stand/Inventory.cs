@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Lemonade_Stand
 {
-    class Inventory
+    public class Inventory
     {
         public Inventory()
         {

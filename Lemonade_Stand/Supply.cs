@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Lemonade_Stand
 {
-    class Supply
+    public class Supply
     {
-
+        protected int dayPurchased;
+        protected int expiration;
         public Supply()
         {
-
+            this.dayPurchased = DayPurchased;
+            this.expiration = Expiration;
         }
 
         public int DayPurchased { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lemonade_Stand
 {
-    class Day
+    public class Day
     {
         private string predictedForecast;
         private int predictedTemperature;
@@ -24,7 +24,6 @@ namespace Lemonade_Stand
             this.actualWeather = new Weather();
             this.actualForecast = actualWeather.GenerateRandomForecast();
             this.actualTemperature = actualWeather.GenerateRandomTemperature((this.predictedTemperature - 8), (this.predictedTemperature + 8));
-            
         }
 
         public string PredictedForecast { get => predictedForecast; set => predictedForecast = value; }

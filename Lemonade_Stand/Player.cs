@@ -1,6 +1,6 @@
 ﻿namespace Lemonade_Stand
 {
-    class Player
+    public class Player
     {
         public Inventory inventory = new Inventory();
 
@@ -26,7 +26,7 @@
         public double RunningTotal { get; set; }
         public Inventory Inventory { get; set; }
 
-        public virtual void CalculateCupsPerPitcher(int playerIcePerCup)
+        public virtual void CalculateCupsPerPitcher(int playerIcePer)
         {
             if (this.IcePerCup <= 4)
             {

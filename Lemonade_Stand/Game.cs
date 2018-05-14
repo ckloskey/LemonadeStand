@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Lemonade_Stand
 {
-    class Game
+    public class Game
     {
         UserInterface userInterface;
         Store store;
@@ -15,6 +15,7 @@ namespace Lemonade_Stand
         Player playerTwo;
         List<Day> gameDayList;
         List<Player> playerList;
+        Supply supply;
 
         public int duration;
         public Game()
@@ -24,6 +25,7 @@ namespace Lemonade_Stand
             this.player = new Human();
             this.gameDayList = new List<Day>();
             this.playerList = new List<Player>();
+            this.supply = new Supply();
         }
 
         public void RunGame()
@@ -56,6 +58,7 @@ namespace Lemonade_Stand
                 int temperatureForTomorrow = tomorrow.PredictedTemperature;
                 string forecastForTomorrow = tomorrow.PredictedForecast;
                 DisplayNextDayWeather("Tomorrow's", temperatureForTomorrow, forecastForTomorrow);
+                supply.DayPurchased = i;
 
                 if (playerTwo != null)
                 {
@@ -74,6 +77,7 @@ namespace Lemonade_Stand
                 {
                     Console.WriteLine("Money: " + player.StartingMoney);
                     Console.WriteLine("Inventory ==> Lemons: " + player.inventory.TotalLemonsInInventory + " Sugar: " + player.inventory.TotalSugarInInventory + " Cups: " + player.inventory.CupsInInventory + " Ice Cubes: " + player.inventory.IcecubesInInventory);
+                    
                     purchasing = userInterface.PurchasingMenu();
                     if (purchasing == "5"){ break; }
                     int purchaseQuantity = PurchaseQuantity();
@@ -95,7 +99,7 @@ namespace Lemonade_Stand
                         player.CalculateCupsPerPitcher(player.IcePerCup);
                         break;
                     }
-                    new Supply().DayPurchased = i;
+
                     if (changeSetting == "1")
                     {
                         double newPrice = userInterface.PromptForPrice();
